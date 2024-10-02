@@ -131,8 +131,8 @@ function Register({ navigation }) {
                 </Formik>
 
 
-                <Text onPress={() => navigation.navigate('Register')} style={globalStyles.registerText}>Don't have an account?
-                    <Text style={[globalStyles.registerText, globalStyles.registerSubText]}> Register</Text> </Text>
+                <Text onPress={() => navigation.navigate('Login')} style={globalStyles.registerText}>Already have an account?
+                    <Text style={[globalStyles.registerText, globalStyles.registerSubText]}> Login</Text> </Text>
             </KeyboardAwareScrollView>
         </View>
     );
@@ -141,29 +141,6 @@ function Register({ navigation }) {
 const screenWidth = Dimensions.get('window').width;
 
 // const globalStyles = StyleSheet.create({
-//     title: {
-//         fontSize: typography.fontSize.xxxl,
-//         fontFamily: typography.primary.bold,
-//         color: colors.tint
-//     },
-//     logoImage: {
-//         width: screenWidth * 0.6,    // 80% of screen width
-//         height: undefined,         // This is necessary when using aspectRatio
-//         aspectRatio: 1,            // Adjusts based on the image's natural dimensions
-//         marginHorizontal: 'auto',
-//     },
-//     registerText: {
-//         fontFamily: typography.primary.medium,
-//         color: colors.text,
-//         marginVertical: spacing.xs,
-//         textAlign: 'center',
-//         fontSize: typography.fontSize.md
-//     },
-//     registerSubText: {
-//         fontFamily: typography.primary.bold,
-//         color: colors.tint,
-//     },
-
 // });
 
 export default Register;
