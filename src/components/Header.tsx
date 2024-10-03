@@ -34,12 +34,10 @@ function Header(props) {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        flexWrap: 'nowrap',
-        flex: 1,
-        width: "100%",
-        height:'auto',
-        minHeight:50,
+         justifyContent: 'space-between',
+         alignItems: 'center', // Ensure vertical alignment of items
+
+        minHeight: 50, // Set a consistent height for the header
         paddingHorizontal: spacing.xs,
         backgroundColor: colors.palette.neutral300,
         paddingVertical: spacing.xxs
