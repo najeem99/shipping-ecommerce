@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import React from 'react';
 import { useTogglePasswordVisibility } from '../hooks/useTogglePasswordVisibility';
 import ShowHidePasswordIcon from '../components/ShowHidePasswordIcon';
+import { UserDataContext } from '../context/UserDataContext';
 
 const userSchema = yup.object({
     email: yup.string().required().email(),
@@ -23,6 +24,8 @@ const userSchema = yup.object({
 
 function Login({ navigation }) {
     const { theme } = useContext(ThemeContext);
+    const { setUserData } = useContext(UserDataContext);
+
     const [error, setError] = useState(null)
     const { passwordVisibility, handlePasswordVisibility } = useTogglePasswordVisibility();
 
@@ -52,10 +55,13 @@ function Login({ navigation }) {
         const userExists = checkIfUserExists(values, res);
 
         if (userExists) {
-
+            const index = res.findIndex((value)=> value.user.email)
+            setUserData(res[index]);
+            console.log('yes accessible')
         } else {
-            setError("Invalid email or password");
-            Alert.alert("Issues Logging in", error);
+            const errorMsg = "Invalid email or password"
+            setError(errorMsg);
+            Alert.alert("Issues Logging in", errorMsg);
         }
 
     }

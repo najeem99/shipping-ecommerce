@@ -7,6 +7,7 @@ import { useFonts } from "expo-font"
 import { customFontsToLoad } from './src/theme';
 import Register from './src/screens/Register';
 import ApplicationNavigator from './src/navigation/ApplicationNavigator';
+import { UserAuthProvider } from './src/context/UserDataContext';
 
 export default function App() {
   const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
@@ -16,8 +17,10 @@ export default function App() {
   return (
     <ThemeProvider>
       <SafeAreaView style={styles.container}>
+        <UserAuthProvider>
 
-        <ApplicationNavigator />
+          <ApplicationNavigator />
+        </UserAuthProvider>
 
         <StatusBar style="auto" />
       </SafeAreaView>

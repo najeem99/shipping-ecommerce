@@ -115,7 +115,7 @@ function Register({ navigation }) {
 
                             >
                                 <ShowHidePasswordIcon
-                                    onPress={confirmPasswordVisibility}
+                                    onPress={handleConfirmPasswordVisibility}
                                     passwordVisibility={confirmPasswordVisibility}
                                 ></ShowHidePasswordIcon>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { StyleSheet, ViewStyle } from 'react-native';
+import { colors, spacing, typography } from '../theme';
 
 // Define the interface for the component props
 interface ShowHidePasswordIconProps {
@@ -23,8 +24,8 @@ const ShowHidePasswordIcon: React.FC<ShowHidePasswordIconProps> = ({ passwordVis
 
 const styles = StyleSheet.create({
     icon: {
-        paddingHorizontal: 10,
-        fontSize: 20,
+        paddingHorizontal: spacing.sm,
+        fontSize: typography.fontSize.xl,
     },
 });
 
