@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { UserDataContext } from "../context/UserDataContext";
 import { useContext } from "react";
 import Header from "../components/Header";
+import { colors } from "../theme";
 
 function Dashboard(props) {
     const { user } = useContext(UserDataContext);
@@ -9,13 +10,7 @@ function Dashboard(props) {
         <View>
             <View style={styles.profileContainer}>
 
-            {/* <Image
-                style={styles.tinyLogo}
-                source={{uri: user.user.image}}
-
-            ></Image>
-            <Text>Welcome Back {user.user.name}</Text> */}
-            <Header></Header>
+            {/* <Header></Header> */}
             </View>
         </View>
     );
@@ -30,6 +25,7 @@ const styles = StyleSheet.create({
     },
     profileContainer:{
         flexDirection:'row',
+        backgroundColor:colors.tint,
     }
 
 });

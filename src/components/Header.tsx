@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: "100%",
         height:'auto',
+        minHeight:50,
         paddingHorizontal: spacing.xs,
         backgroundColor: colors.palette.neutral300,
         paddingVertical: spacing.xxs
