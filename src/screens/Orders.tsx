@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image } from 'react-native';
 import { getOrders } from '../services/OrderService';
 import { UserDataContext } from '../context/UserDataContext';
-const Orders = ({ props }) => {
+import { colors, spacing, typography } from '../theme';
+
+const Orders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -26,12 +28,35 @@ const Orders = ({ props }) => {
         fetchOrders();
     }, [userId]);
 
-    // Render a single order item
+    // Render a single product item within an order
+    const renderProductItem = (product) => (
+        <View key={product.productId} style={styles.productContainer}>
+            <Image
+                style={styles.productImage}
+                source={{ uri: 'https://media.istockphoto.com/id/1296078405/vector/vector-isolated-round-completed-label.jpg?s=612x612&w=0&k=20&c=CNkTbrNNNikay9hTXc02OXFKF40XZJp_w2eomM4LxEU=' }} // Placeholder image for product
+            />
+            <View style={styles.productInfo}>
+                <Text style={styles.productTitle}>Product ID: {product.productId}</Text>
+                <Text style={styles.productQuantity}>Quantity: {product.quantity}</Text>
+                <Text style={styles.productPrice}>Price: {product.price} {product.currency}</Text>
+            </View>
+        </View>
+    );
+
+    // Render a single order item with its products
     const renderOrderItem = ({ item }) => (
-        <View style={styles.orderItem}>
-            <Text style={styles.orderText}>Product ID: {item.productId}</Text>
-            <Text style={styles.orderText}>Total Amount: {item.totalAmount} {item.currency}</Text>
-            <Text style={styles.orderText}>Payment Method: {item.paymentMethod.type}</Text>
+        <View style={styles.orderCard}>
+            <View style={styles.orderInfo}>
+                <Text style={styles.orderTitle}>Order ID: {item.id}</Text>
+                <Text style={styles.orderAmount}>
+                    Total: <Text style={styles.amountText}>{item.totalAmount} {item.currency}</Text>
+                </Text>
+                <Text style={styles.paymentMethod}>Payment Method: {item.paymentMethod.type}</Text>
+                <Text style={styles.deliveryAddress}>Delivering to: {item.deliveryAddress}</Text>
+            </View>
+
+            {/* Render all products for the order */}
+            {item.products.map(renderProductItem)}
         </View>
     );
 
@@ -55,7 +80,7 @@ const Orders = ({ props }) => {
             {orders.length > 0 ? (
                 <FlatList
                     data={orders}
-                    keyExtractor={(item) => item.productId}
+                    keyExtractor={(item) => item.id}  // Use the 'id' field for unique keys
                     renderItem={renderOrderItem}
                     contentContainerStyle={styles.listContent}
                 />
@@ -71,7 +96,8 @@ export default Orders;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        backgroundColor: colors.background,
+        padding: spacing.sm,
     },
     loader: {
         flex: 1,
@@ -83,24 +109,78 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     errorText: {
-        color: 'red',
-        fontSize: 18,
+        color: colors.error,
+        fontSize: typography.fontSize.lg,
     },
     noDataText: {
         textAlign: 'center',
-        fontSize: 16,
-        color: '#888',
+        fontSize: typography.fontSize.md,
+        color: colors.textDim,
     },
     listContent: {
-        paddingBottom: 20,
+        paddingBottom: spacing.lg,
     },
-    orderItem: {
-        backgroundColor: '#f8f8f8',
-        padding: 15,
-        marginVertical: 8,
+    orderCard: {
+        backgroundColor: colors.palette.neutral200,
+        padding: spacing.md,
+        marginVertical: spacing.sm,
+        borderRadius: 10,
+        shadowColor: colors.palette.neutral900,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 2,
+    },
+    orderInfo: {
+        marginBottom: spacing.sm,
+    },
+    orderTitle: {
+        fontSize: typography.fontSize.lg,
+        fontWeight: 'bold',
+    },
+    orderAmount: {
+        fontSize: typography.fontSize.md,
+        color: colors.palette.neutral700,
+        marginVertical: spacing.xs,
+    },
+    amountText: {
+        fontWeight: 'bold',
+        color: colors.palette.primary500,
+    },
+    paymentMethod: {
+        fontSize: typography.fontSize.sm,
+        color: colors.palette.neutral600,
+    },
+    deliveryAddress: {
+        fontSize: typography.fontSize.sm,
+        color: colors.palette.neutral600,
+        marginTop: spacing.xs,
+    },
+    productContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: spacing.sm,
+    },
+    productImage: {
+        width: 60,
+        height: 60,
+        marginRight: spacing.sm,
         borderRadius: 8,
+        backgroundColor: colors.palette.neutral300,
     },
-    orderText: {
-        fontSize: 16,
+    productInfo: {
+        flex: 1,
+    },
+    productTitle: {
+        fontSize: typography.fontSize.md,
+        fontWeight: 'bold',
+    },
+    productQuantity: {
+        fontSize: typography.fontSize.sm,
+        color: colors.palette.neutral700,
+    },
+    productPrice: {
+        fontSize: typography.fontSize.sm,
+        color: colors.palette.primary500,
     },
 });
