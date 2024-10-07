@@ -5,7 +5,7 @@ import { FormikErrors } from 'formik';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 interface TextFieldProps extends TextInputProps {
-    label: string;
+    label?: string;
     style?: StyleProp<ViewStyle>; // Optional style prop
     errorText?: string
 }
