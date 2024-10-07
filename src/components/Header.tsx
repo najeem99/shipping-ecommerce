@@ -39,13 +39,14 @@ const styles = StyleSheet.create({
 
         minHeight: 50, // Set a consistent height for the header
         paddingHorizontal: spacing.xs,
-        backgroundColor: colors.palette.neutral300,
+        backgroundColor: colors.tint,
         paddingVertical: spacing.xxs
     },
     sidebarIcon: {
         fontSize: spacing.lg,
         marginVertical: 'auto',
-        paddingHorizontal: spacing.xs
+        paddingHorizontal: spacing.xs,
+        color:colors.palette.neutral100,
         // backgroundColor: 'blue'
     },
     imageContainer: {

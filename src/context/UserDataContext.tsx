@@ -28,6 +28,7 @@ export const UserDataContext = createContext<UserDataContextType | null>(null);
 export const UserAuthProvider: React.FC<UserAuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<GetUsers | null>( {
         "user": {
+          "id": 1,
           "name": "Mirza",
           "phoneNumber": "+971562738467",
           "email": "test@test.com",
