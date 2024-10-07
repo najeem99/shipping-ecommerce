@@ -2,6 +2,7 @@
 
 const palette = {
   // Neutrals
+  white: "#FFFFFF",   // Pure White
   neutral100: "#FFFFFF",   // Pure White
   neutral200: "#F7F7F7",   // Light Gray
   neutral300: "#E1E1E1",   // Medium Light Gray
@@ -11,6 +12,7 @@ const palette = {
   neutral700: "#333333",   // Almost Black
   neutral800: "#1A1A1A",   // Darker Charcoal
   neutral900: "#000000",   // Black
+  black: "#000000",   // Black
 
   // Primary Colors
   primary100: "#E0F7FA",  // Light Cyan

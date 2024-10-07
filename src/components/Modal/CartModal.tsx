@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, View, Text, StyleSheet, FlatList, Image } from 'react-native';
 import { useCart } from '../../context/CartContext';
 import Button from '../Button';
-import { colors } from '../../theme';
+import { colors, spacing, typography } from '../../theme';
 
 const CartModal = () => {
     const { isCartVisible, toggleCart, cartItems } = useCart();
@@ -64,22 +64,22 @@ const CartModal = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        padding: spacing.md,
         backgroundColor: colors.background,
-        borderRadius:20,
-        marginHorizontal:10,
-        marginVertical:20,
+        borderRadius: 20,
+        marginHorizontal: spacing.sm,
+        marginVertical: spacing.md,
     },
     header: {
-        fontSize: 24,
+        fontSize: typography.fontSize.lg,
         fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: spacing.sm,
         textAlign: 'center',
     },
     itemContainer: {
         flexDirection: 'row',
-        marginBottom: 15,
-        padding: 10,
+        marginBottom: spacing.sm,
+        padding: spacing.sm,
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 8,
@@ -88,53 +88,53 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 8,
-        marginRight: 10,
+        marginRight: spacing.sm,
     },
     itemDetails: {
         flex: 1,
         justifyContent: 'space-between',
     },
     itemName: {
-        fontSize: 18,
+        fontSize: typography.fontSize.md,
         fontWeight: 'bold',
     },
     itemDescription: {
-        fontSize: 14,
+        fontSize: typography.fontSize.sm,
         color: '#666',
     },
     itemPrice: {
-        fontSize: 16,
+        fontSize: typography.fontSize.md,
         fontWeight: 'bold',
         color: '#000',
     },
     itemQuantity: {
-        fontSize: 14,
+        fontSize: typography.fontSize.sm,
         color: '#666',
     },
     totalValue: {
-        fontSize: 20,
+        fontSize: typography.fontSize.lg,
         fontWeight: 'bold',
         color: '#000',
-        marginTop: 20,
+        marginTop: spacing.md,
         textAlign: 'center',
     },
     buttonContainer: {
-        marginTop: 20,
+        marginTop: spacing.md,
         flexDirection: 'row',
-        justifyContent: 'space-around', 
+        justifyContent: 'space-around',
         alignItems: 'center',
     },
     checkoutButton: {
-        backgroundColor: '#4CAF50', 
-        marginRight: 10, 
+        backgroundColor: '#4CAF50',
+        marginRight: spacing.sm,
         alignItems: 'center',
         width: '100%',
     },
     closeButton: {
-        backgroundColor: '#f44336', 
+        backgroundColor: '#f44336',
         width: '100%',
-
     },
 });
+
 
 export default CartModal;

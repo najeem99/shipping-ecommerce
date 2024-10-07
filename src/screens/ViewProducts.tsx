@@ -5,6 +5,7 @@ import { Products } from "../types/product";
 import { getProducts, addToCart as addToCartApi, removeFromCart as removeFromCartApi, getCartItems } from "../services/ProductService";
 import { UserDataContext } from "../context/UserDataContext";
 import { useCart } from "../context/CartContext";
+import { colors, spacing, typography } from "../theme";
 
 function ViewProducts(props) {
     const [product, setProducts] = useState<Products[]>([]);
@@ -87,7 +88,6 @@ function ViewProducts(props) {
                                     <Text style={styles.productName}>{item.name}</Text>
                                     <Text style={styles.productPrice}>{`AED ${item.price}`}</Text>
                                     <Text style={styles.productDescription}>{item.description}</Text>
-                                    <Text style={styles.productDescription}>{String(isInCart)}</Text>
                                     <TouchableOpacity
                                         style={[styles.cartButton, isInCart ? styles.removeButton : styles.addButton]}
                                         onPress={() => handleCartToggle(item)}
@@ -109,20 +109,20 @@ function ViewProducts(props) {
 const styles = StyleSheet.create({
     pageContainer: {
         flex: 1,
-        padding: 16,
-        backgroundColor: '#f8f8f8',
+        padding: spacing.sm,
+        backgroundColor: colors.background,
     },
     errorText: {
-        color: 'red',
-        marginBottom: 10,
+        color: colors.error,
+        marginBottom: spacing.xs,
     },
     productCard: {
         flexDirection: 'row',
-        padding: 10,
-        marginBottom: 10,
-        backgroundColor: '#fff',
-        borderRadius: 8,
-        shadowColor: '#000',
+        padding: spacing.sm,
+        marginBottom: spacing.sm,
+        backgroundColor: colors.palette.white,
+        borderRadius: spacing.xs,
+        shadowColor: colors.palette.black,
         shadowOpacity: 0.1,
         shadowRadius: 5,
         elevation: 3,
@@ -130,41 +130,42 @@ const styles = StyleSheet.create({
     productImage: {
         width: 80,
         height: 80,
-        borderRadius: 8,
-        marginRight: 10,
+        borderRadius: spacing.xs,
+        marginRight: spacing.sm,
     },
     productDetails: {
         flex: 1,
         justifyContent: 'center',
     },
     productName: {
-        fontSize: 16,
+        fontSize: typography.fontSize.md,
         fontWeight: 'bold',
-        marginBottom: 4,
+        marginBottom: spacing.xxs,
     },
     productPrice: {
-        fontSize: 14,
-        color: '#888',
-        marginBottom: 4,
+        fontSize: typography.fontSize.sm,
+        color: colors.tint,
+        marginBottom: spacing.xxs,
+        fontWeight:'bold',
     },
     productDescription: {
-        fontSize: 12,
-        color: '#666',
-        marginBottom: 10,
+        fontSize: typography.fontSize.xs,
+        color: colors.text,
+        marginBottom: spacing.sm,
     },
     cartButton: {
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        borderRadius: 4,
+        paddingVertical: spacing.xs,
+        paddingHorizontal: spacing.sm,
+        borderRadius: spacing.xs,
     },
     addButton: {
-        backgroundColor: '#28a745',
+        backgroundColor: colors.tint,
     },
     removeButton: {
-        backgroundColor: '#dc3545',
+        backgroundColor: colors.error,
     },
     cartButtonText: {
-        color: '#fff',
+        color: colors.palette.white,
         textAlign: 'center',
         fontWeight: 'bold',
     },
