@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, useState, ReactNode, useContext } from "react";
 import { GetUsers } from "../types/user";
 
 // // Define the shape of the user object
@@ -23,6 +23,10 @@ interface UserAuthProviderProps {
 
 // Create the context with a default value
 export const UserDataContext = createContext<UserDataContextType | null>(null);
+
+export const useUserData = () => {
+  return useContext(UserDataContext);
+};
 
 // Create the provider component
 export const UserAuthProvider: React.FC<UserAuthProviderProps> = ({ children }) => {

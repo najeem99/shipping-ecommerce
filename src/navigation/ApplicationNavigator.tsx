@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { AuthNavigator } from './AuthStack';
 import { useContext } from 'react';
 import { UserDataContext } from '../context/UserDataContext';
-import { ProctectedNavigator } from './ProtectedStack';
+import { ProtectedNavigator } from './ProtectedStack';
 
 function ApplicationNavigator() {
     console.log("AuthNavigator");
@@ -10,7 +10,7 @@ function ApplicationNavigator() {
 
     return (
         <NavigationContainer>
-            {isSignedIn ? <ProctectedNavigator /> : <AuthNavigator />}
+            {isSignedIn ? <ProtectedNavigator /> : <AuthNavigator />}
         </NavigationContainer>
     );
 }

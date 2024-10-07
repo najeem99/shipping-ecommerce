@@ -1,25 +1,51 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useEffect, useState } from 'react';
 import Dashboard from '../screens/Dashboard';
-import { Button, Text } from 'react-native';
-import Header from '../components/Header';
 import ViewProducts from '../screens/ViewProducts';
 import Orders from '../screens/Orders';
 import MyAddress from '../screens/MyAddress';
-const ProctectedStack = createNativeStackNavigator();
+import Header from '../components/Header';
+import { CartProvider } from '../context/CartContext';
+import CartModal from '../components/Modal/CartModal';
 
-export const ProctectedNavigator = () => (
-    <ProctectedStack.Navigator initialRouteName="Dashboard"
+const ProtectedStack = createNativeStackNavigator();
 
-        screenOptions={{
-            headerShown: true,
-            header: Header
-        }}
+export const ProtectedNavigator = () => {
 
+    return (
+        <CartProvider>
+            <ProtectedStack.Navigator
+                initialRouteName="Dashboard"
+                screenOptions={{
+                    headerShown: true,
+                    header: (props) => <Header  {...props} ></Header>
+                }}
+            >
+                <ProtectedStack.Screen
+                    name="Dashboard"
+                    component={Dashboard}
 
-    >
-        <ProctectedStack.Screen name="Dashboard" component={Dashboard} />
-        <ProctectedStack.Screen name="ViewProducts" component={ViewProducts} />
-        <ProctectedStack.Screen name="Orders" component={Orders} />
-        <ProctectedStack.Screen name="MyAddress" component={MyAddress} />
-    </ProctectedStack.Navigator>
-);
+                />
+                <ProtectedStack.Screen
+                    name="ViewProducts"
+                    component={ViewProducts}
+                    options={{ headerTitle: 'View Products' }}
+
+                />
+                <ProtectedStack.Screen
+                    name="Orders"
+                    component={Orders}
+                    options={{ headerTitle: 'Orders' }}
+
+                />
+                <ProtectedStack.Screen
+                    name="MyAddress"
+                    component={MyAddress}
+                    options={{ headerTitle: 'My Address' }}
+
+                />
+            </ProtectedStack.Navigator>
+            <CartModal></CartModal>
+        </CartProvider>
+    );
+};

@@ -1,68 +1,91 @@
-import { View, StyleSheet, Dimensions, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, Text, Image } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome5';
-
 import { colors, spacing, typography } from '../theme';
-import { UserDataContext } from "../context/UserDataContext";
+import { UserDataContext, useUserData } from "../context/UserDataContext";
 import { useContext } from "react";
-import { Image } from "react-native";
-function Header(props) {
-    const { user } = useContext(UserDataContext);
-    console.log("Header", user.user.image)
+import React from "react";
+import { useCart } from "../context/CartContext";
+
+function Header({ options, route, navigation: { goBack }, ...props }) {
+    const { user } = useUserData();
+    const { isCartVisible, toggleCart } = useCart(); // Use cart context
+
+    const commonHeader = () => {
+        return (
+            <>
+                <Pressable onPress={() => goBack()}>
+                    <Icon style={styles.sidebarIcon} name="chevron-left" />
+                </Pressable>
+
+                <Text style={styles.title}>{options?.headerTitle}</Text>
+
+                <Pressable onPress={toggleCart}>
+                    <Icon style={styles.sidebarIcon} name="shopping-cart" />
+                </Pressable>
+            </>
+
+        )
+    }
+    const dashboardHeader = () => {
+        return (
+            <>
+                <Pressable onPress={() => console.log('menu pressed')}>
+                    <Icon style={styles.sidebarIcon} name="bars" />
+                </Pressable>
+
+                <Text style={styles.title}>{options?.headerTitle}</Text>
+
+                <View style={styles.imageContainer}>
+                    <Pressable onPress={() => console.log('Image pressed')}>
+                        <Image style={styles.tinyLogo} source={{ uri: user.user.image }} />
+                    </Pressable>
+                </View>
+            </>
+
+        )
+    }
     return (
         <View style={styles.container}>
-            <Pressable
-                onPress={() => (console.log('menu pressed'))}
-            >
-                <Icon
-                    style={styles.sidebarIcon}
-                    name="bars"
-                ></Icon>
-            </Pressable>
-            <View style={styles.imageContainer}>
-                <Pressable
-                    onPress={() => (console.log('Image pressed'))}
-                ><Image
-                    style={styles.tinyLogo}
-                    source={{ uri: user.user.image }}
-                ></Image>
-                </Pressable>
-            </View>
-
+            {route.name === 'Dashboard' ? dashboardHeader() : commonHeader()}
         </View>
+
     );
 }
+
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-         justifyContent: 'space-between',
-         alignItems: 'center', // Ensure vertical alignment of items
-
-        minHeight: 50, // Set a consistent height for the header
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        minHeight: 50,
         paddingHorizontal: spacing.xs,
         backgroundColor: colors.tint,
-        paddingVertical: spacing.xxs
+        paddingVertical: spacing.xxs,
     },
     sidebarIcon: {
         fontSize: spacing.lg,
         marginVertical: 'auto',
         paddingHorizontal: spacing.xs,
-        color:colors.palette.neutral100,
-        // backgroundColor: 'blue'
+        color: colors.palette.neutral100,
+    },
+    title: {
+        flex: 1,
+        fontSize: typography.fontSize.md,
+        fontWeight: 'bold',
+        color: colors.palette.neutral100,
+        textAlign: 'center',
     },
     imageContainer: {
         flex: 1,
         width: 'auto',
-        display: 'flex',
         maxHeight: 40,
         maxWidth: 40,
     },
     tinyLogo: {
-        // backgroundColor: 'green',
         width: '100%',
         height: '100%',
-        objectFit: 'contain',
-        // margin: spacing.xxxs,
         borderRadius: 100,
     },
 });
+
 export default Header;

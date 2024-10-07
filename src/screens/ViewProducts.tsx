@@ -1,14 +1,16 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { FlatList, TouchableOpacity, View, Text, Image, StyleSheet } from "react-native";
+import { FlatList, TouchableOpacity, View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
 import { Products } from "../types/product";
-import { getProducts, addToCart, removeFromCart, getCartItems } from "../services/ProductService"; // Import getCartItems
+import { getProducts, addToCart, removeFromCart, getCartItems } from "../services/ProductService";
 import { UserDataContext } from "../context/UserDataContext";
+import { useCart } from "../context/CartContext";
 
 function ViewProducts(props) {
     const [product, setProducts] = useState<Products[]>([]);
     const [error, setError] = useState(null);
-    const [cart, setCart] = useState<Products[]>([]); // State to track products in the cart
+    const [loading, setLoading] = useState(true); // State to track loading status
+    const { cartItems, addToCart, removeFromCart, setInitialCartItems } = useCart(); // Use cart context
 
     const { user } = useContext(UserDataContext);
     const userId = user.user.id;
@@ -16,8 +18,10 @@ function ViewProducts(props) {
     // useEffect to fetch products and cart items
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true); // Start loading
             await getAllProducts();
             await getAllCartItems();
+            setLoading(false); // End loading
         };
 
         fetchData();
@@ -36,8 +40,8 @@ function ViewProducts(props) {
     const getAllCartItems = async () => {
         try {
             const cartItems = await getCartItems(userId);
-            console.log('cartItems',cartItems)
-            setCart(cartItems); // Update cart state with fetched items
+            console.log('cartItems', cartItems);
+            setInitialCartItems(cartItems); // Update cart state with fetched items
         } catch (error) {
             console.error('Failed to fetch cart items:', error);
             setError("Failed to fetch cart items. Please try again later.");
@@ -46,7 +50,7 @@ function ViewProducts(props) {
 
     // Function to toggle between adding and removing from cart
     const handleCartToggle = (item) => {
-        if (cart.some(product => product.id === item.id)) {
+        if (cartItems.some(product => product.id === item.id)) {
             handleRemoveFromCart(item.id);
         } else {
             handleAddToCart(item);
@@ -56,10 +60,8 @@ function ViewProducts(props) {
     const handleAddToCart = async (item) => {
         try {
             const updatedCart = await addToCart(userId, item);
-            setCart((prevValue) => {
-                return [...prevValue, updatedCart]; // Update cart state with new item
-            });
-         } catch (error) {
+            addToCart(item)
+        } catch (error) {
             console.error('Error adding product to cart:', error);
         }
     };
@@ -67,46 +69,50 @@ function ViewProducts(props) {
     const handleRemoveFromCart = async (productId) => {
         try {
             await removeFromCart(userId, productId); // Assuming this API call confirms the removal
-            setCart((prevCart) => prevCart.filter((product) => product.id !== productId)); // Remove the product from the cart state
+            removeFromCart(productId)
             console.log('Product removed from cart:', productId);
         } catch (error) {
             console.error('Error removing product from cart:', error);
         }
     };
-    
+
     return (
         <View style={styles.pageContainer}>
             {error && <Text style={styles.errorText}>{error}</Text>}
-            <FlatList
-                data={product}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => {
-                    const isInCart = cart.some(product => product.id === item.id); // Check if the item is in the cart here
+            {loading ? ( // Show loading indicator while fetching data
+                <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+                <FlatList
+                    data={product}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => {
+                        const isInCart = cartItems.some(product => product.id === item.id); // Check if the item is in the cart here
 
-                    return (
-                        <View style={styles.productCard}>
-                            <Image
-                                source={{ uri: item.productImage }}
-                                style={styles.productImage}
-                            />
-                            <View style={styles.productDetails}>
-                                <Text style={styles.productName}>{item.name}</Text>
-                                <Text style={styles.productPrice}>{`AED ${item.price}`}</Text>
-                                <Text style={styles.productDescription}>{item.description}</Text>
-                                <Text style={styles.productDescription}>{String(isInCart)}</Text>
-                                <TouchableOpacity
-                                    style={[styles.cartButton, isInCart ? styles.removeButton : styles.addButton]}
-                                    onPress={() => handleCartToggle(item)}
-                                >
-                                    <Text style={styles.cartButtonText}>
-                                        {isInCart ? 'Remove from Cart' : 'Add to Cart'}
-                                    </Text>
-                                </TouchableOpacity>
+                        return (
+                            <View style={styles.productCard}>
+                                <Image
+                                    source={{ uri: item.productImage }}
+                                    style={styles.productImage}
+                                />
+                                <View style={styles.productDetails}>
+                                    <Text style={styles.productName}>{item.name}</Text>
+                                    <Text style={styles.productPrice}>{`AED ${item.price}`}</Text>
+                                    <Text style={styles.productDescription}>{item.description}</Text>
+                                    <Text style={styles.productDescription}>{String(isInCart)}</Text>
+                                    <TouchableOpacity
+                                        style={[styles.cartButton, isInCart ? styles.removeButton : styles.addButton]}
+                                        onPress={() => handleCartToggle(item)}
+                                    >
+                                        <Text style={styles.cartButtonText}>
+                                            {isInCart ? 'Remove from Cart' : 'Add to Cart'}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
-                    );
-                }}
-            />
+                        );
+                    }}
+                />
+            )}
         </View>
     );
 };
