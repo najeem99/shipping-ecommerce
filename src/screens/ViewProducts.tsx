@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { FlatList, TouchableOpacity, View, Text, Image, StyleSheet, ActivityIndicator } from "react-native";
 import { Products } from "../types/product";
-import { getProducts, addToCart, removeFromCart, getCartItems } from "../services/ProductService";
+import { getProducts, addToCart as addToCartApi, removeFromCart as removeFromCartApi, getCartItems } from "../services/ProductService";
 import { UserDataContext } from "../context/UserDataContext";
 import { useCart } from "../context/CartContext";
 
@@ -10,7 +10,7 @@ function ViewProducts(props) {
     const [product, setProducts] = useState<Products[]>([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true); // State to track loading status
-    const { cartItems, addToCart, removeFromCart, setInitialCartItems } = useCart(); // Use cart context
+    const { cartItems, addToCart, removeFromCart } = useCart(); // Use cart context
 
     const { user } = useContext(UserDataContext);
     const userId = user.user.id;
@@ -20,7 +20,6 @@ function ViewProducts(props) {
         const fetchData = async () => {
             setLoading(true); // Start loading
             await getAllProducts();
-            await getAllCartItems();
             setLoading(false); // End loading
         };
 
@@ -37,16 +36,6 @@ function ViewProducts(props) {
         }
     };
 
-    const getAllCartItems = async () => {
-        try {
-            const cartItems = await getCartItems(userId);
-            console.log('cartItems', cartItems);
-            setInitialCartItems(cartItems); // Update cart state with fetched items
-        } catch (error) {
-            console.error('Failed to fetch cart items:', error);
-            setError("Failed to fetch cart items. Please try again later.");
-        }
-    };
 
     // Function to toggle between adding and removing from cart
     const handleCartToggle = (item) => {
@@ -59,7 +48,7 @@ function ViewProducts(props) {
 
     const handleAddToCart = async (item) => {
         try {
-            const updatedCart = await addToCart(userId, item);
+             const updatedCart = await addToCartApi(userId, item);
             addToCart(item)
         } catch (error) {
             console.error('Error adding product to cart:', error);
@@ -68,7 +57,7 @@ function ViewProducts(props) {
 
     const handleRemoveFromCart = async (productId) => {
         try {
-            await removeFromCart(userId, productId); // Assuming this API call confirms the removal
+            await removeFromCartApi(userId, productId); // Assuming this API call confirms the removal
             removeFromCart(productId)
             console.log('Product removed from cart:', productId);
         } catch (error) {
