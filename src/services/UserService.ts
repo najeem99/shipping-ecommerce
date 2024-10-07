@@ -2,9 +2,9 @@ import axios from 'axios';
 
 const API_URL = 'http://192.168.56.1:3000';
 
-export const getUsers = async (userId) => {
+export const getUsers = async () => {
     try {
-      const response = await fetch(`${API_URL}/users/${userId}`);
+      const response = await fetch(`${API_URL}/users/`);
       if (!response.ok) {
         throw new Error('Failed to fetch user data');
       }

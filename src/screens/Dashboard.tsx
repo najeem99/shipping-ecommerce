@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { colors, spacing, typography } from "../theme";
 import MenuItem from "../components/MenuItem";
 
-function Dashboard({navigation,props}) {
+function Dashboard({ navigation, props }) {
     const { user } = useContext(UserDataContext);
     return (
         <ScrollView>
@@ -14,17 +14,18 @@ function Dashboard({navigation,props}) {
 
                 <View style={styles.menuContainer}>
 
-                    <MenuItem   
-                        onPress={() => navigation.navigate('ViewProducts') }
+                    <MenuItem
+                        onPress={() => navigation.navigate('ViewProducts')}
                         imageUrl={"https://cdn-icons-png.freepik.com/256/4577/4577267.png?semt=ais_hybrid"}
                         title="Products"
                     ></MenuItem>
                     <MenuItem
+                        onPress={() => navigation.navigate('MyAddress')}
                         imageUrl={"https://cdn-icons-png.freepik.com/256/1288/1288563.png?semt=ais_hybrid"}
                         title="My Address"
-                        ></MenuItem>
+                    ></MenuItem>
                     <MenuItem
-                        onPress={() => navigation.navigate('Orders') }
+                        onPress={() => navigation.navigate('Orders')}
                         imageUrl={"https://cdn-icons-png.freepik.com/256/3045/3045670.png?semt=ais_hybrid"}
                         title="My Orders"
                     ></MenuItem>
