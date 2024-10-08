@@ -6,13 +6,14 @@ import { colors, spacing, typography } from '../theme';
 import Button from '../components/Button';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import globalStyles from '../theme/global-styles';
-import { getUsers } from '../services/UserService';
+import { getUsers, saveUser } from '../services/UserService';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { GetUsers } from '../types/user';
 import React from 'react';
 import ShowHidePasswordIcon from '../components/ShowHidePasswordIcon';
 import { useTogglePasswordVisibility } from '../hooks/useTogglePasswordVisibility';
+import {  useUserData } from '../context/UserDataContext';
 
 const userSchema = yup.object({
     email: yup.string().required().email(),
@@ -27,6 +28,8 @@ const userSchema = yup.object({
 function Register({ navigation }) {
     const { theme } = useContext(ThemeContext);
     const [error, setError] = useState(null)
+    const { setUserData } = useUserData();
+
     const { passwordVisibility: passwordVisibility, handlePasswordVisibility: handlePasswordVisibility } = useTogglePasswordVisibility();
     const { passwordVisibility: confirmPasswordVisibility, handlePasswordVisibility: handleConfirmPasswordVisibility } = useTogglePasswordVisibility();
 
@@ -58,8 +61,30 @@ function Register({ navigation }) {
 
             setError("Email already Exists");
         } else {
-            console.log('new user')
-            Alert.alert("Issues Logging in", error);
+            const payload = {
+                "user": {
+                    "name": values?.name || '',
+                    "phoneNumber": "+971501234567",
+                    "email": values.email,
+                    "currency": "AED",
+                    "language": "en",
+                    "image": "https://example.com/image.jpg",
+                    "address": [],
+                    "password": values.password,
+                    "orders": [],
+                    "cartItems": []
+                }
+            }
+            try {
+                const res = await saveUser(payload);
+                console.log('Registered created successfully:',res);
+                setUserData(res)
+            } catch (error) {
+                Alert.alert("Issues Logging in");
+
+            }
+
+
         }
 
     }

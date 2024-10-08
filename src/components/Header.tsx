@@ -7,7 +7,7 @@ import React from "react";
 import { useCart } from "../context/CartContext";
 
 function Header({ options, route, navigation: { goBack, navigate, reset }, ...props }) {
-    const { user } = useUserData();
+    const { user,signOut } = useUserData();
     const { isCartVisible, toggleCart } = useCart(); // Use cart context
 
     const commonHeader = () => {
@@ -36,7 +36,7 @@ function Header({ options, route, navigation: { goBack, navigate, reset }, ...pr
                 <Text style={styles.title}>{options?.headerTitle}</Text>
 
                 <View style={styles.imageContainer}>
-                    <Pressable onPress={() => console.log('Image pressed')}>
+                    <Pressable onPress={signOut}>
                         <Image style={styles.tinyLogo} source={{ uri: user.user.image }} />
                     </Pressable>
                 </View>
