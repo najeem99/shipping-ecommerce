@@ -16,6 +16,7 @@ import { useTogglePasswordVisibility } from '../hooks/useTogglePasswordVisibilit
 import {  useUserData } from '../context/UserDataContext';
 
 const userSchema = yup.object({
+    name: yup.string().required(),
     email: yup.string().required().email(),
     password: yup.string().required().min(5).max(12),
     confirmPassword: yup.string()
@@ -68,7 +69,7 @@ function Register({ navigation }) {
                     "email": values.email,
                     "currency": "AED",
                     "language": "en",
-                    "image": "https://example.com/image.jpg",
+                    "image": "https://cf-img-a-in.tosshub.com/sites/visualstory/wp/2024/07/John-Cena-13.jpg?size=*:900",
                     "address": [],
                     "password": values.password,
                     "orders": [],
@@ -100,6 +101,7 @@ function Register({ navigation }) {
 
                 <Formik
                     initialValues={{
+                        name: '',
                         email: '',
                         password: '',
                         confirmPassword: ''
@@ -113,6 +115,12 @@ function Register({ navigation }) {
                     {({ handleSubmit, handleChange, handleBlur, values, errors, touched, isValid }) => (
                         <>
 
+                            <TextField label='Name' keyboardType='ascii-capable'
+                                onChangeText={handleChange('name')}
+                                onBlur={handleBlur('name')}
+                                value={values.name}
+                                errorText={((touched?.name && errors.name) && errors.name)}
+                            ></TextField>
                             <TextField label='Email' keyboardType='email-address'
                                 onChangeText={handleChange('email')}
                                 onBlur={handleBlur('email')}
