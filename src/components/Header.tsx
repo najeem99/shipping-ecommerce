@@ -6,14 +6,14 @@ import { useContext } from "react";
 import React from "react";
 import { useCart } from "../context/CartContext";
 
-function Header({ options, route, navigation: { goBack,navigate }, ...props }) {
+function Header({ options, route, navigation: { goBack, navigate, reset }, ...props }) {
     const { user } = useUserData();
     const { isCartVisible, toggleCart } = useCart(); // Use cart context
 
     const commonHeader = () => {
         return (
             <>
-                <Pressable onPress={() => goBack()}>
+                <Pressable onPress={() => (reset({ index: 0, routes: [{ name: 'Dashboard' }], }))}>
                     <Icon style={styles.sidebarIcon} name="chevron-left" />
                 </Pressable>
 
