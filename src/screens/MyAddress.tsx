@@ -49,13 +49,7 @@ function MyAddress() {
         );
     }
 
-    if (!address.length) { // If no address and not loading
-        return (
-            <View style={styles.container}>
-                <Text style={styles.noDataText}>No addresses found.</Text>
-            </View>
-        );
-    }
+
 
     const handleClick = (value) => {
         setEditableAddress(value ? value : null);
@@ -87,12 +81,20 @@ function MyAddress() {
                 onPress={() => setModalVisible(true)}
                 label="Add New Address"
             />
-            <FlatList
-                data={address}
-                renderItem={renderAddressItem}
-                keyExtractor={(item) => item.id.toString()} // Ensure unique keys for each item
-                contentContainerStyle={styles.listContainer} // Optional: For padding or margins
-            />
+            {!address.length ? (
+                <View style={styles.container}>
+                    <Text style={styles.noDataText}>No addresses found.</Text>
+                </View>
+
+            ) : (
+                <FlatList
+                    data={address}
+                    renderItem={renderAddressItem}
+                    keyExtractor={(item) => item.id.toString()} // Ensure unique keys for each item
+                    contentContainerStyle={styles.listContainer} // Optional: For padding or margins
+                />
+
+            )}
             <AddAddressModal
                 isVisible={isModalVisible}
                 editableData={editableAddress}
