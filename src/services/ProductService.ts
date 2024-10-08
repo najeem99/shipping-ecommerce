@@ -1,11 +1,12 @@
 import axios from 'axios';
 
-const API_URL = 'http://192.168.0.98:3000';
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const MOCK_API_URL = process.env.EXPO_PUBLIC_MOCKAPI_URL;
 
 export const getProducts = async () => {
     try {
-        console.log(`https://66f3d20277b5e8897096fce5.mockapi.io/api/v1/Products`);
-        const response = await axios.get(`https://66f3d20277b5e8897096fce5.mockapi.io/api/v1/Products`)
+        console.log(MOCK_API_URL);
+        const response = await axios.get(MOCK_API_URL)
         return response.data
     } catch (error) {
         console.error('Error fetching data:', error);

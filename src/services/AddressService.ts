@@ -1,7 +1,7 @@
 // addressService.js
 import axios from 'axios';
 
-const API_URL = 'http://192.168.0.98:3000';
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export const getAddressByUserId = async (userId) => {
   try {

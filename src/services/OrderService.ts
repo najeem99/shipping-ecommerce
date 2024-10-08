@@ -1,9 +1,9 @@
 import axios from 'axios';
-
-const API_URL = 'http://192.168.0.98:3000';
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 // Function to get orders for a specific user
 export const getOrders = async (userId) => {
+  console.log('getOrders',API_URL)
   try {
     const response = await axios.get(`${API_URL}/users/${userId}/orders`);
     return response.data;
