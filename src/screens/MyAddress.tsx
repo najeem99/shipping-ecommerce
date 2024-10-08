@@ -10,23 +10,24 @@ import AddAddressModal from "../components/Modal/AddAddressModal";
 function MyAddress() {
     const [address, setAddress] = useState([]);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true); // New loading state
     const [editableAddress, setEditableAddress] = useState(null);
-    const [isModalVisible, setModalVisible] = useState(false); // State for modal visibility
+    const [isModalVisible, setModalVisible] = useState(false);
     const { user } = useContext(UserDataContext);
 
-
     const userId = user.user.id;
-    
+
     const fetchAddress = async () => {
         try {
+            setLoading(true); // Set loading to true before fetching
             const fetchedAddress = await getAddressByUserId(userId);
             setAddress(fetchedAddress);
         } catch (err) {
             setError(err.message);
+        } finally {
+            setLoading(false); // Set loading to false after fetching
         }
     };
-
-
 
     useEffect(() => {
         fetchAddress();
@@ -40,39 +41,43 @@ function MyAddress() {
         );
     }
 
-    if (!address.length) {
+    if (loading) { // Check loading state
         return (
             <View style={styles.container}>
                 <ActivityIndicator size="large" color={colors.palette.primary600} />
             </View>
         );
     }
-    const handleClick = (value) => {
-        if (value) {
-            setEditableAddress(value)
-        } else {
-            setEditableAddress(null)
-        }
-        setModalVisible(true)
+
+    if (!address.length) { // If no address and not loading
+        return (
+            <View style={styles.container}>
+                <Text style={styles.noDataText}>No addresses found.</Text>
+            </View>
+        );
     }
+
+    const handleClick = (value) => {
+        setEditableAddress(value ? value : null);
+        setModalVisible(true);
+    }
+
     const closeModal = () => {
         setModalVisible(false);
         fetchAddress();
     }
+
     // Render each address item
     const renderAddressItem = ({ item }) => (
         <TouchableOpacity style={styles.addressCard} onPress={() => handleClick(item)} >
             <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row' }} >
                 <Text style={styles.addressText}>City: <Text style={styles.addressValue}>{item.city}</Text></Text>
-                {/* <Icon style={styles.defaultIcon} name="check-circle" /> */}
                 {item.isDefault && <Icon style={styles.defaultIcon} name="check-circle" />}
             </View>
             <Text style={styles.addressText}>Country: <Text style={styles.addressValue}>{item.country}</Text></Text>
             <Text style={styles.addressText}>Area: <Text style={styles.addressValue}>{item.area}</Text></Text>
             <Text style={styles.addressText}>Building: <Text style={styles.addressValue}>{item.building}</Text></Text>
             <Text style={styles.addressText}>Landmark: <Text style={styles.addressValue}>{item.landmark}</Text></Text>
-            {/* <Text style={styles.addressText}>Default: <Text style={styles.addressValue}>{item.isDefault ? "Yes" : "No"}</Text></Text> */}
-
         </TouchableOpacity>
     );
 
@@ -81,8 +86,7 @@ function MyAddress() {
             <Button style={styles.addButton}
                 onPress={() => setModalVisible(true)}
                 label="Add New Address"
-            >
-            </Button>
+            />
             <FlatList
                 data={address}
                 renderItem={renderAddressItem}
@@ -94,7 +98,6 @@ function MyAddress() {
                 editableData={editableAddress}
                 onClose={() => closeModal()}
             />
-
         </View>
     );
 };
@@ -151,8 +154,13 @@ const styles = StyleSheet.create({
         marginVertical: 'auto',
         paddingHorizontal: spacing.xs,
         color: 'green',
+    },
+    noDataText: {
+        textAlign: 'center',
+        fontSize: typography.fontSize.md,
+        color: colors.textDim,
+    },
 
-    }
 });
 
 export default MyAddress;
