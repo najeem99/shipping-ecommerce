@@ -7,7 +7,7 @@ import MenuItem from "../components/MenuItem";
 function Dashboard({ navigation, props }) {
     const { user } = useContext(UserDataContext);
     return (
-        <ScrollView>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.profileContainer}>
                 <Text style={styles.title}>Dashboard</Text>
                 <Text style={styles.welcomeText}>Hello {user.user.name}</Text>
@@ -41,12 +41,16 @@ function Dashboard({ navigation, props }) {
     );
 }
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1, // Allows the ScrollView to take the full height
+    },
 
     profileContainer: {
         flex: 1,
         flexDirection: 'column',
         backgroundColor: colors.tint,
         minHeight: 130,
+        height: '100%',
         borderBottomLeftRadius: 30,  // Bottom-left corner rounded
         borderBottomRightRadius: 30, // Bottom-right corner rounded
     },
@@ -66,9 +70,9 @@ const styles = StyleSheet.create({
     },
     menuContainer: {
         backgroundColor: 'white',
-        borderRadius: 25,
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25,
         width: '100%',
-        minHeight: 100,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -76,6 +80,8 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         gap: 10,
         paddingHorizontal: spacing.xs,
+        flex: 1,
+        height: '100%',
     },
     menuItem: {
         // flex: 1,

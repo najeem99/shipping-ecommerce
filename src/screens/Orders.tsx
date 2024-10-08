@@ -3,62 +3,95 @@ import { View, Text, FlatList, ActivityIndicator, StyleSheet, Image } from 'reac
 import { getOrders } from '../services/OrderService';
 import { UserDataContext } from '../context/UserDataContext';
 import { colors, spacing, typography } from '../theme';
-
+import { getProducts } from '../services/ProductService';
+import { getAddressByUserId } from '../services/AddressService';
+ 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [addresses, setAddresses] = useState([]); // State to hold addresses
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const { user } = useContext(UserDataContext);
     const userId = user.user.id;
 
-    // Fetch orders when the component mounts
+    // Fetch orders, products, and addresses when the component mounts
     useEffect(() => {
-        const fetchOrders = async () => {
+        const fetchOrdersAndProducts = async () => {
             try {
+                // Fetch orders
                 const fetchedOrders = await getOrders(userId);
                 setOrders(fetchedOrders);
+
+                // Fetch products
+                const fetchedProducts = await getProducts();
+                setProducts(fetchedProducts);
+
+                // Fetch addresses
+                const fetchedAddresses = await getAddressByUserId(userId); // Pass userId if needed
+                console.log(fetchedAddresses)
+                setAddresses(fetchedAddresses);
             } catch (err) {
-                setError(err.message || 'Failed to fetch orders');
+                setError(err.message || 'Failed to fetch data');
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchOrders();
+        fetchOrdersAndProducts();
     }, [userId]);
 
     // Render a single product item within an order
     const renderProductItem = (product) => (
-        <View key={product.productId} style={styles.productContainer}>
+        <View key={product.id} style={styles.productContainer}>
             <Image
                 style={styles.productImage}
-                source={{ uri: 'https://media.istockphoto.com/id/1296078405/vector/vector-isolated-round-completed-label.jpg?s=612x612&w=0&k=20&c=CNkTbrNNNikay9hTXc02OXFKF40XZJp_w2eomM4LxEU=' }} // Placeholder image for product
+                source={{ uri: product.productImage }} // Use the product image URL
             />
             <View style={styles.productInfo}>
-                <Text style={styles.productTitle}>Product ID: {product.productId}</Text>
-                <Text style={styles.productQuantity}>Quantity: {product.quantity}</Text>
+                <Text style={styles.productTitle}>{product.name}</Text>
+                <Text numberOfLines={1} ellipsizeMode='tail'  style={styles.productQuantity}>{product.description}</Text>
                 <Text style={styles.productPrice}>Price: {product.price} {product.currency}</Text>
             </View>
         </View>
     );
 
-    // Render a single order item with its products
-    const renderOrderItem = ({ item }) => (
-        <View style={styles.orderCard}>
-            <View style={styles.orderInfo}>
-                <Text style={styles.orderTitle}>Order ID: {item.id}</Text>
-                <Text style={styles.orderAmount}>
-                    Total: <Text style={styles.amountText}>{item.totalAmount} {item.currency}</Text>
-                </Text>
-                <Text style={styles.paymentMethod}>Payment Method: {item.paymentMethod.type}</Text>
-                <Text style={styles.deliveryAddress}>Delivering to: {item.deliveryAddress}</Text>
-            </View>
+    // Get the delivery address for the order
+    const getDeliveryAddress = (addressId) => {
+        const matchedAddress = addresses.find(address => (address.id)?.toString() === addressId?.toString());
+        return matchedAddress ? `${matchedAddress.building}, ${matchedAddress.area}, ${matchedAddress.city}, ${matchedAddress.country}` : `Address not found`;
+    };
 
-            {/* Render all products for the order */}
-            {item.products.map(renderProductItem)}
-        </View>
-    );
+    // Render a single order item with its products
+    const renderOrderItem = ({ item }) => {
+        const orderProducts = item.products.map((orderProduct) => {
+            // Match products from the order with the products fetched
+            const matchedProduct = products.find(product => product.id === orderProduct.productId);
+            return matchedProduct ? { ...matchedProduct, quantity: orderProduct.quantity } : null;
+        }).filter(Boolean); 
+
+        const deliveryAddress = getDeliveryAddress(item.deliveryAddress);  
+
+        return (
+            <View style={styles.orderCard}>
+                <View style={styles.orderInfo}>
+                    <Text style={styles.orderTitle}>Order ID: {item.id}</Text>
+                    <Text style={styles.orderAmount}>
+                        Total: <Text style={styles.amountText}>{item.totalAmount} {item.currency}</Text>
+                    </Text>
+                    <Text style={styles.paymentMethod}>Payment Method: {item.paymentMethod.type}</Text>
+                    <Text style={styles.deliveryAddress}>Delivering to: {deliveryAddress}</Text>
+                </View>
+
+                 {orderProducts.length > 0 ? (
+                    orderProducts.map(renderProductItem)
+                ) : (
+                    <Text>No products found for this order</Text>
+                )}
+            </View>
+        );
+    };
 
     // Display a loading indicator while fetching data
     if (loading) {
