@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://192.168.56.1:3000';
+const API_URL = 'http://192.168.0.98:3000';
 
 export const getProducts = async () => {
     try {
@@ -54,6 +54,25 @@ export const getCartItems = async (userId) => {
         return response.data; // Return the response data
     } catch (error) {
         console.error('Error fetching cart items:', error);
+        throw error; // Throw the error to handle it in the calling function
+    }
+};
+
+// Function to clear all items from the cart
+export const clearCartItems = async (userId) => {
+    try {
+        console.log(`${API_URL}/users/${userId}/cartItems`); // Log the API URL for debugging
+
+        // Perform a DELETE request to remove all cart items
+        const response = await axios.delete(`${API_URL}/users/${userId}/cartItems`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        return response.data; // Return the response data
+    } catch (error) {
+        console.error('Error clearing cart:', error);
         throw error; // Throw the error to handle it in the calling function
     }
 };

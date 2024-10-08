@@ -4,7 +4,7 @@ import { useCart } from '../../context/CartContext';
 import Button from '../Button';
 import { colors, spacing, typography } from '../../theme';
 
-const CartModal = () => {
+const CartModal = ({navigation}) => {
     const { isCartVisible, toggleCart, cartItems } = useCart();
 
     // Calculate total cart value
@@ -15,15 +15,16 @@ const CartModal = () => {
     const handleCheckout = () => {
         // Implement your checkout logic here
         console.log('Checkout pressed',cartItems);
+        navigation.navigate('Checkout')
         // You can navigate to a checkout screen or perform further actions.
     };
 
     return (
-        <Modal
-            visible={isCartVisible}
-            animationType="slide"
-            onRequestClose={toggleCart}
-        >
+        // <Modal
+        //     visible={isCartVisible}
+        //     animationType="slide"
+        //     onRequestClose={toggleCart}
+        // >
             <View style={styles.container}>
                 <Text style={styles.header}>Your Cart</Text>
 
@@ -52,12 +53,13 @@ const CartModal = () => {
                     ></Button>
                     <Button label='Close Cart'
                         style={styles.closeButton}
-                        onPress={toggleCart}
+                        // onPress={toggleCart}
+                        onPress={() => navigation.goBack()}
                     ></Button>
 
                 </View>
             </View>
-        </Modal>
+        // </Modal>
     );
 };
 

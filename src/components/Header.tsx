@@ -6,7 +6,7 @@ import { useContext } from "react";
 import React from "react";
 import { useCart } from "../context/CartContext";
 
-function Header({ options, route, navigation: { goBack }, ...props }) {
+function Header({ options, route, navigation: { goBack,navigate }, ...props }) {
     const { user } = useUserData();
     const { isCartVisible, toggleCart } = useCart(); // Use cart context
 
@@ -19,7 +19,7 @@ function Header({ options, route, navigation: { goBack }, ...props }) {
 
                 <Text style={styles.title}>{options?.headerTitle}</Text>
 
-                <Pressable onPress={toggleCart}>
+                <Pressable onPress={() => navigate('CartModal')}>
                     <Icon style={styles.sidebarIcon} name="shopping-cart" />
                 </Pressable>
             </>
