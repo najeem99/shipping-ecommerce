@@ -29,6 +29,11 @@ function Dashboard({ navigation, props }) {
                         imageUrl={"https://cdn-icons-png.freepik.com/256/3045/3045670.png?semt=ais_hybrid"}
                         title="My Orders"
                     ></MenuItem>
+                    <MenuItem
+                        onPress={() => navigation.navigate('CartModal')}
+                        imageUrl={"https://i.pinimg.com/564x/6d/87/85/6d8785745ce4bfcfde76814d29e3c569.jpg"}
+                        title="My Cart"
+                    ></MenuItem>
 
                 </View>
             </View>

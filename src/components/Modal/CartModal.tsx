@@ -20,14 +20,11 @@ const CartModal = ({navigation}) => {
     };
 
     return (
-        // <Modal
-        //     visible={isCartVisible}
-        //     animationType="slide"
-        //     onRequestClose={toggleCart}
-        // >
             <View style={styles.container}>
                 <Text style={styles.header}>Your Cart</Text>
-
+                {cartItems.length === 0 ? (
+                <Text style={styles.emptyCartText}>Your cart is empty.</Text>
+            ) : (
                  <FlatList
                     data={cartItems} // Show only items in cart
                     keyExtractor={item => item.id}
@@ -42,6 +39,7 @@ const CartModal = ({navigation}) => {
                         </View>
                     )}
                 />
+            )}
 
                 <Text style={styles.totalValue}>Total: AED {totalCartValue}</Text>
 
@@ -59,8 +57,7 @@ const CartModal = ({navigation}) => {
 
                 </View>
             </View>
-        // </Modal>
-    );
+     );
 };
 
 const styles = StyleSheet.create({
@@ -136,6 +133,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#f44336',
         width: '100%',
     },
+    emptyCartText: {
+        fontSize: typography.fontSize.md,
+        color: '#666',
+        textAlign: 'center',
+        marginTop: spacing.md,
+        height:'70%',
+    },
+
 });
 
 

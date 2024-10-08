@@ -1,43 +1,20 @@
 import { TouchableOpacity, Image, Text, StyleSheet } from "react-native";
 import { colors, spacing, typography } from "../theme";
 
-
 function MenuItem({ imageUrl, title, ...props }) {
     return (
-        <TouchableOpacity 
-        style={[styles.menuItem]} 
-        { ...props}>
+        <TouchableOpacity style={styles.menuItem} {...props}>
             <Image
-                style={{
-                    width: 150,
-                    height: 150,
-                    margin: 'auto',
-                }}
+                style={styles.image}
                 source={{ uri: imageUrl }}
-            ></Image>
-            <Text style={{
-                textAlign: 'center',
-            }}>{title}</Text>
+            />
+            <Text style={styles.title}>{title}</Text>
         </TouchableOpacity>
     );
 }
-const styles = StyleSheet.create({
 
-    menuContainer: {
-        backgroundColor: 'white',
-        borderRadius: 25,
-        width: '100%',
-        minHeight: 100,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        alignSelf: 'flex-start',
-        gap: 10,
-        paddingHorizontal: spacing.xs,
-    },
+const styles = StyleSheet.create({
     menuItem: {
-        // flex: 1,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -47,14 +24,24 @@ const styles = StyleSheet.create({
         shadowRadius: 4.65,
         elevation: 6,
         borderRadius: 25,
-        minHeight: 100,
-        minWidth: 10,
         backgroundColor: 'white',
         width: '48%',
         marginVertical: 10,
-    }
-
+        padding: spacing.sm, // Add padding for better spacing
+        alignItems: 'center', // Center align items
+    },
+    image: {
+        width: 120, // Adjusted width
+        height: 120, // Adjusted height
+        borderRadius: 15, // Rounded corners for the image
+        marginBottom: spacing.xs, // Spacing below the image
+    },
+    title: {
+        textAlign: 'center',
+        fontSize: typography.fontSize.md, // Assuming you have typography defined
+        fontWeight: 'bold', // Make the title bold
+        color: colors.tint, // Use a primary color for the title
+    },
 });
-
 
 export default MenuItem;
