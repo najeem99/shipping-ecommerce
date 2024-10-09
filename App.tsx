@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View } from 'react-native';
 import { ThemeProvider } from './src/util/ThemeManager';
 import Login from './src/screens/Login';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +8,8 @@ import { customFontsToLoad } from './src/theme';
 import Register from './src/screens/Register';
 import ApplicationNavigator from './src/navigation/ApplicationNavigator';
 import { UserAuthProvider } from './src/context/UserDataContext';
+import { name as appName } from "./app.json";
+import { registerRootComponent } from 'expo';
 
 export default function App() {
   const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
@@ -36,3 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+registerRootComponent(App);
+
+// AppRegistry.registerComponent(appName, () => App);
+// AppRegistry.registerComponent(appName.toLowerCase(), () => App);
