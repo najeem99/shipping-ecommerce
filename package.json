@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
+    "install-all": "npm install && npm install --prefix backend",
+    "backend": "cd backend && npx nodemon ",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
