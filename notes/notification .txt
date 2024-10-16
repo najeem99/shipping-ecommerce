@@ -1,0 +1,85 @@
+import { StatusBar } from 'expo-status-bar';
+import { AppRegistry, StyleSheet, Text, View } from 'react-native';
+import { ThemeProvider } from './src/util/ThemeManager';
+import Login from './src/screens/Login';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFonts } from "expo-font"
+import { customFontsToLoad } from './src/theme';
+import Register from './src/screens/Register';
+import ApplicationNavigator from './src/navigation/ApplicationNavigator';
+import { UserAuthProvider } from './src/context/UserDataContext';
+import { name as appName } from "./app.json";
+import { registerRootComponent } from 'expo';
+import * as Notifications from 'expo-notifications'
+import Button from './src/components/Button';
+import { useEffect } from 'react';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldPlaySound: true,
+      shouldShowAlert: true,
+      shouldSetBadge: true
+    }
+  }
+});
+
+export default function App() {
+  const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
+
+  useEffect(() => {
+    const subscription1 = Notifications.addNotificationReceivedListener((not) => {
+      console.log(JSON.parse(JSON.stringify(not)))
+
+    })
+    const subscription2 = Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log('ResponseReceived', response)
+    })
+    return () => {
+      subscription1.remove()
+      subscription2.remove()
+    }
+  }, [])
+  if (!areFontsLoaded && !fontLoadError) {
+    return null
+  }
+
+  function scheduleNotificationHandler() {
+    Notifications.scheduleNotificationAsync({
+      'content': {
+        'title': 'Look at that notification',
+        'body': "I'm so proud of myself!",
+        'data': {
+          username: 'najeem'
+        }
+      },
+      trigger: null,
+    })
+
+  }
+  return (
+    <ThemeProvider>
+      <SafeAreaView style={styles.container}>
+        <UserAuthProvider>
+          <Button label='testttt' onPress={scheduleNotificationHandler} ></Button>
+          <ApplicationNavigator />
+        </UserAuthProvider>
+
+        <StatusBar style="auto" />
+      </SafeAreaView>
+    </ThemeProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // backgroundColor: '#fff',
+    // alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+registerRootComponent(App);
+
+// AppRegistry.registerComponent(appName, () => App);
+// AppRegistry.registerComponent(appName.toLowerCase(), () => App);
