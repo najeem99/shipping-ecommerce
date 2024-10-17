@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const PORT = 3000;
+const fetch = require('node-fetch'); // Ensure you have node-fetch installed
 
 // Middleware to parse JSON
 app.use(express.json());
@@ -401,6 +402,7 @@ app.post('/users/:id/orders', (req, res) => {
     const newOrder = req.body;
     user.user.orders.push(newOrder);
     console.log(`New order added for user with id ${userId}`);
+    sendPushNotification('ExponentPushToken[lsGEvOHX7EPCf8Wp1akTIg]', 'Order Placed', `New order added for user with id ${userId}`)
     res.status(201).json(newOrder);
   } else {
     console.error(`User with id ${userId} not found`);
@@ -471,6 +473,35 @@ app.delete('/users/:id/orders/:orderId', (req, res) => {
     res.status(404).json({ message: "User not found" });
   }
 });
+
+async function sendPushNotification(token, title, body) {
+  const url = 'https://exp.host/--/api/v2/push/send';
+  const data = {
+    to: token,
+    title: title,
+    body: body,
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+
+    const responseData = await response.json();
+    return responseData; // Return the response data from the API
+  } catch (error) {
+    console.error('Error sending push notification:', error);
+    throw error; // Rethrow the error for further handling if needed
+  }
+}
 
 
 // Start the server

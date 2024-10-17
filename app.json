@@ -21,6 +21,12 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "67af9c22-2734-4625-9841-7052acd0d267"
+      }
+    },
+    "owner": "najeemfasil"
   }
 }

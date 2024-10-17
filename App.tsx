@@ -1,26 +1,50 @@
 import { StatusBar } from 'expo-status-bar';
-import { AppRegistry, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ThemeProvider } from './src/util/ThemeManager';
-import Login from './src/screens/Login';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts } from "expo-font"
 import { customFontsToLoad } from './src/theme';
-import Register from './src/screens/Register';
 import ApplicationNavigator from './src/navigation/ApplicationNavigator';
 import { UserAuthProvider } from './src/context/UserDataContext';
-import { name as appName } from "./app.json";
 import { registerRootComponent } from 'expo';
+import { useEffect } from 'react';
+import NotificationService from './src/services/NotificationService';
 
 export default function App() {
   const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
+
+  useEffect(() => {
+    async function setupNotifications() {
+      await NotificationService.configurePushNotifications();
+    }
+
+    setupNotifications();
+  }, []);
+
+
+  useEffect(() => {
+    const subscription1 = NotificationService.subscribeToNotifications((notification) => {
+      console.log(JSON.parse(JSON.stringify(notification)));
+    });
+
+    const subscription2 = NotificationService.subscribeToNotificationResponse((response) => {
+      console.log('ResponseReceived', response);
+    });
+
+    return () => {
+      subscription1.remove();
+      subscription2.remove();
+    };
+  }, [])
+
   if (!areFontsLoaded && !fontLoadError) {
     return null
   }
+
   return (
     <ThemeProvider>
       <SafeAreaView style={styles.container}>
         <UserAuthProvider>
-
           <ApplicationNavigator />
         </UserAuthProvider>
 
@@ -33,8 +57,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
-    // alignItems: 'center',
     justifyContent: 'center',
   },
 });
