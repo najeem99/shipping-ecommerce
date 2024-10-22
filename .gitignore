@@ -34,5 +34,8 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+*.idea
+
 android.gradle.properties
 android/app/my-upload-key.keystore
+ship-ecommerce-notification-firebase-adminsdk-do9we-3bb0f8e9d4.json
