@@ -39,3 +39,11 @@ yarn-error.*
 android.gradle.properties
 android/app/my-upload-key.keystore
 ship-ecommerce-notification-firebase-adminsdk-do9we-3bb0f8e9d4.json
+
+#Build Folder: If you are using a custom build folder for Android/iOS, it’s good to ignore those as well:
+android/build/
+ios/build/
+
+#Babel Cache: Consider ignoring Babel cache files:
+.babelrc
+.babelrc.js
