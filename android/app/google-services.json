@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "756199230538",
+    "project_id": "ship-ecommerce-notification",
+    "storage_bucket": "ship-ecommerce-notification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:756199230538:android:6d9b00dcedcd5eafe26ab3",
+        "android_client_info": {
+          "package_name": "com.najeem.shipecommerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5MxsBxInR9Izkz2B2Y_Le3OpJ8CN9SfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
