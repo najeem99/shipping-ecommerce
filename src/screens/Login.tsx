@@ -77,8 +77,8 @@ function Login({ navigation }) {
 
                 <Formik
                     initialValues={{
-                        email: '',
-                        password: ''
+                        email: 'test@test.com',
+                        password: '12345'
                     }}
                     onSubmit={(values) => handleSubmit(values)}
                     validateOnBlur={true}

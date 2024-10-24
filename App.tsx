@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
 import { ThemeProvider } from './src/util/ThemeManager';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts } from "expo-font"
 import { customFontsToLoad } from './src/theme';
 import ApplicationNavigator from './src/navigation/ApplicationNavigator';
@@ -9,6 +8,8 @@ import { UserAuthProvider } from './src/context/UserDataContext';
 import { registerRootComponent } from 'expo';
 import { useEffect } from 'react';
 import NotificationService from './src/services/NotificationService';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
   const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
@@ -43,13 +44,16 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaProvider  > 
+
+      <SafeAreaView style={styles.container}  >
+      <StatusBar style="auto" backgroundColor = 'green'  />
         <UserAuthProvider>
           <ApplicationNavigator />
         </UserAuthProvider>
 
-        <StatusBar style="auto" />
       </SafeAreaView>
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }
