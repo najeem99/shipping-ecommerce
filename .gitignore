@@ -48,3 +48,8 @@ ios/build/
 #Babel Cache: Consider ignoring Babel cache files:
 .babelrc
 .babelrc.js
+
+# Expo
+.expo
+dist/
+web-build/
